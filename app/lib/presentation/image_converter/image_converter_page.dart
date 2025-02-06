@@ -1,3 +1,4 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -5,11 +6,12 @@ import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'dart:math';
 
 class ImageCompressorPage extends StatefulWidget {
+  const ImageCompressorPage({super.key});
+
   @override
-  _ImageCompressorPageState createState() => _ImageCompressorPageState();
+  State<ImageCompressorPage> createState() => _ImageCompressorPageState();
 }
 
 class _ImageCompressorPageState extends State<ImageCompressorPage> {
@@ -85,8 +87,8 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
   void downloadWebP(Uint8List webpBytes, String originalFileName) {
     final blob = html.Blob([webpBytes], 'image/webp');
     final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.AnchorElement(href: url)
-      ..setAttribute("download", "$originalFileName.webp")
+    html.AnchorElement(href: url)
+      ..setAttribute('download', '$originalFileName.webp')
       ..click();
     html.Url.revokeObjectUrl(url);
   }
@@ -102,7 +104,7 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Bild Kompressor und WebP Konverter",
+                'Bild Kompressor und WebP Konverter',
                 style: Theme.of(context).textTheme.displayLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -134,7 +136,7 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.upload, size: 40),
-                        Text("Ziehe Bilder hierher oder klicke zum Hochladen"),
+                        Text('Ziehe Bilder hierher oder klicke zum Hochladen'),
                       ],
                     ),
                   ],
@@ -147,7 +149,7 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
 
           // 📌 Preview List of Uploaded Images
           if (imageBytesList.isNotEmpty)
-            Container(
+            SizedBox(
               height: 200,
               child: Center(
                 child: ListView.separated(
@@ -177,7 +179,7 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Komprimierungslevel: ${compressionQuality.toInt()}%"),
+              Text('Komprimierungslevel: ${compressionQuality.toInt()}%'),
             ],
           ),
           Row(
@@ -188,7 +190,7 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
                 min: 1,
                 max: 100,
                 divisions: 99,
-                label: "${compressionQuality.toInt()}%",
+                label: '${compressionQuality.toInt()}%',
                 onChanged: (double value) {
                   setState(() {
                     compressionQuality = value;
@@ -201,7 +203,7 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Konvertiere zu 1080p"),
+                  Text('Konvertiere zu 1080p'),
                   Switch(
                     value: compressTo1080p,
                     onChanged: (bool value) {
@@ -225,7 +227,7 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
               }
             },
             icon: Icon(Icons.download),
-            label: Text("Download WebP"),
+            label: Text('Download WebP'),
           ),
         ],
       ),

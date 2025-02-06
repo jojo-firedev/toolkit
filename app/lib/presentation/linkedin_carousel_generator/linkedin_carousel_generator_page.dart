@@ -1,3 +1,4 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
@@ -22,17 +23,12 @@ class _LinkedInCarouselGeneratorPageState
 
   // 📌 Handle Drag & Drop for Multiple Files
   Future<void> onDropMultiple(List<DropzoneFileInterface>? events) async {
-    try {
-      if (events == null) return;
-      for (var event in events) {
-        final bytes = await dropzoneController.getFileData(event);
-        setState(() {
-          imageBytesList.add(bytes);
-        });
-      }
-      print("${events.length} files added successfully!");
-    } catch (e) {
-      print("Error processing dropped files: $e");
+    if (events == null) return;
+    for (var event in events) {
+      final bytes = await dropzoneController.getFileData(event);
+      setState(() {
+        imageBytesList.add(bytes);
+      });
     }
   }
 
@@ -47,7 +43,6 @@ class _LinkedInCarouselGeneratorPageState
       setState(() {
         imageBytesList.addAll(result.files.map((file) => file.bytes!).toList());
       });
-      print("${result.files.length} files added successfully!");
     }
   }
 
@@ -55,7 +50,7 @@ class _LinkedInCarouselGeneratorPageState
   Future<void> generatePdf() async {
     if (imageBytesList.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Bitte wählen Sie mindestens ein Bild aus!")),
+        SnackBar(content: Text('Bitte wählen Sie mindestens ein Bild aus!')),
       );
       return;
     }
@@ -81,7 +76,7 @@ class _LinkedInCarouselGeneratorPageState
     final url = html.Url.createObjectUrlFromBlob(blob);
     // ignore: unused_local_variable
     final anchor = html.AnchorElement(href: url)
-      ..setAttribute("download", "LinkedIn_Carousel.pdf")
+      ..setAttribute('download', 'LinkedIn_Carousel.pdf')
       ..click();
     html.Url.revokeObjectUrl(url);
   }
@@ -96,7 +91,7 @@ class _LinkedInCarouselGeneratorPageState
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                "LinkedIn Carousel Generator",
+                'LinkedIn Carousel Generator',
                 style: Theme.of(context).textTheme.displayLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -109,9 +104,9 @@ class _LinkedInCarouselGeneratorPageState
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: Text(
-              "Erstellen Sie einen LinkedIn Carousel-Beitrag. "
-              "Hierfür können Sie Bilder per Drag & Drop oder über den Dateiauswähler hinzufügen. "
-              "Klicken Sie auf 'Als PDF exportieren', um die Bilder als PDF herunterzuladen.",
+              'Erstellen Sie einen LinkedIn Carousel-Beitrag. '
+              'Hierfür können Sie Bilder per Drag & Drop oder über den Dateiauswähler hinzufügen. '
+              'Klicken Sie auf "Als PDF exportieren", um die Bilder als PDF herunterzuladen.,',
               textAlign: TextAlign.center,
             ),
           ),
@@ -139,7 +134,7 @@ class _LinkedInCarouselGeneratorPageState
                       spacing: 18,
                       children: [
                         Icon(Icons.upload, size: 40),
-                        Text("Ziehe Bilder hierher oder klicke zum Hochladen"),
+                        Text('Ziehe Bilder hierher oder klicke zum Hochladen'),
                       ],
                     ),
                   ],
@@ -149,7 +144,7 @@ class _LinkedInCarouselGeneratorPageState
           ),
           SizedBox(height: 20),
           if (imageBytesList.isNotEmpty)
-            Container(
+            SizedBox(
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -169,7 +164,7 @@ class _LinkedInCarouselGeneratorPageState
               FilledButton.icon(
                 onPressed: generatePdf,
                 icon: Icon(Icons.picture_as_pdf),
-                label: Text("Als PDF exportieren"),
+                label: Text('Als PDF exportieren'),
               ),
             ],
           ),

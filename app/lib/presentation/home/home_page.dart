@@ -7,19 +7,19 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("📢 Social Media Toolkit")),
+      appBar: AppBar(title: Text('FireDev Toolkit')),
       body: GridView.count(
         crossAxisCount: 2,
         padding: EdgeInsets.all(20),
         children: [
           _buildToolCard(
             context,
-            "📄 LinkedIn Carousel",
+            'LinkedIn Carousel',
             '/social-media/linkedin-carousel',
           ),
           _buildToolCard(
             context,
-            "Compress Images",
+            'Compress Images',
             '/converter/image-compressor',
           ),
         ],
