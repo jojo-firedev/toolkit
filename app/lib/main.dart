@@ -7,16 +7,16 @@ void main() {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const SocialMediaToolkitApp());
+  runApp(const FireDevToolkitApp());
 }
 
-class SocialMediaToolkitApp extends StatelessWidget {
-  const SocialMediaToolkitApp({super.key});
+class FireDevToolkitApp extends StatelessWidget {
+  const FireDevToolkitApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'SocialMedia Toolkit',
+      title: 'FireDev Toolkit',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.deepPurple, brightness: Brightness.dark),
