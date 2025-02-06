@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "app (Flutter Edge)",
+            "program": "lib/main.dart",
+            "cwd": "app",
+            "deviceId": "edge",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
