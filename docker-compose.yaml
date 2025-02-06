@@ -1,4 +1,4 @@
-volumes:
+services :
   # Flutter web frontend service
   frontend:
 
