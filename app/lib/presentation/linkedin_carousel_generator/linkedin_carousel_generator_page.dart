@@ -79,6 +79,7 @@ class _LinkedInCarouselGeneratorPageState
     final pdfBytes = await pdf.save();
     final blob = html.Blob([pdfBytes], 'application/pdf');
     final url = html.Url.createObjectUrlFromBlob(blob);
+    // ignore: unused_local_variable
     final anchor = html.AnchorElement(href: url)
       ..setAttribute("download", "LinkedIn_Carousel.pdf")
       ..click();
@@ -110,7 +111,7 @@ class _LinkedInCarouselGeneratorPageState
             child: Text(
               "Erstellen Sie einen LinkedIn Carousel-Beitrag. "
               "Hierfür können Sie Bilder per Drag & Drop oder über den Dateiauswähler hinzufügen. "
-              "Klicken Sie auf 'Exportieren PDF', um die Bilder als PDF herunterzuladen.",
+              "Klicken Sie auf 'Als PDF exportieren', um die Bilder als PDF herunterzuladen.",
               textAlign: TextAlign.center,
             ),
           ),
@@ -168,7 +169,7 @@ class _LinkedInCarouselGeneratorPageState
               FilledButton.icon(
                 onPressed: generatePdf,
                 icon: Icon(Icons.picture_as_pdf),
-                label: Text("Exportieren PDF"),
+                label: Text("Als PDF exportieren"),
               ),
             ],
           ),
