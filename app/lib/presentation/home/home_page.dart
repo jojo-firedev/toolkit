@@ -12,11 +12,16 @@ class HomePage extends StatelessWidget {
         crossAxisCount: 2,
         padding: EdgeInsets.all(20),
         children: [
-          _buildToolCard(context, "📄 LinkedIn Carousel", ''),
-          _buildToolCard(context, "📸 Instagram Post", ''),
-          _buildToolCard(context, "🐦 Twitter Graphics", ''),
-          _buildToolCard(context, "📢 Facebook Ad", ''),
-          _buildToolCard(context, "🎨 Branding Tools", ''),
+          _buildToolCard(
+            context,
+            "📄 LinkedIn Carousel",
+            '/social-media/linkedin-carousel',
+          ),
+          _buildToolCard(
+            context,
+            "Compress Images",
+            '/converter/image-compressor',
+          ),
         ],
       ),
     );
