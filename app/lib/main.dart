@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_toolkit/router.dart';
+import 'package:social_media_toolkit/services/router.dart';
 import 'package:dynamic_path_url_strategy/dynamic_path_url_strategy.dart';
 
 void main() {
