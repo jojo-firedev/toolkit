@@ -3,6 +3,7 @@ import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:pdf/pdf.dart';
@@ -83,6 +84,13 @@ class _LinkedInCarouselGeneratorPageState
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setApplicationSwitcherDescription(
+      ApplicationSwitcherDescription(
+        label: 'LinkedIn Carousel - FD Toolkit',
+        primaryColor:
+            Theme.of(context).primaryColor.value, // This line is required
+      ),
+    );
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

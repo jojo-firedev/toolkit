@@ -2,6 +2,7 @@
 import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -95,6 +96,13 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setApplicationSwitcherDescription(
+      ApplicationSwitcherDescription(
+        label: 'Image Converter - FD Toolkit',
+        primaryColor:
+            Theme.of(context).primaryColor.value, // This line is required
+      ),
+    );
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

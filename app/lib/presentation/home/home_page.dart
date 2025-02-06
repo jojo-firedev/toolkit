@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
@@ -6,6 +7,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setApplicationSwitcherDescription(
+      ApplicationSwitcherDescription(
+        label: 'FD Toolkit',
+        primaryColor:
+            Theme.of(context).primaryColor.value, // This line is required
+      ),
+    );
     return Scaffold(
       appBar: AppBar(title: Text('FD Toolkit')),
       body: GridView.count(
