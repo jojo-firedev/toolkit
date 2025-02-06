@@ -45,11 +45,7 @@ class HomePage extends StatelessWidget {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                    text: 'Collection of tools',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  TextSpan(
-                    text: '   |   by ',
+                    text: 'by ',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   TextSpan(
