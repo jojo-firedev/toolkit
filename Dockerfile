@@ -5,7 +5,7 @@ FROM ghcr.io/cirruslabs/flutter:stable AS build
 WORKDIR /app
 
 # Copy the Flutter project files
-COPY . .
+COPY app .
 
 # Precache Flutter Web SDK
 RUN flutter precache --web

@@ -1,0 +1,11 @@
+# Flutter web frontend service
+  frontend:
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: muster_frontend
+    ports:
+      - 8090:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
