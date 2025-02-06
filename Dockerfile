@@ -1,14 +1,14 @@
 # Use a pre-configured Flutter image for building the web app
 FROM ghcr.io/cirruslabs/flutter:stable AS build
 
+# Precache Flutter Web SDK
+RUN flutter precache --web
+
 # Set the working directory
 WORKDIR /app
 
 # Copy the Flutter project files
 COPY app .
-
-# Precache Flutter Web SDK
-RUN flutter precache --web
 
 # Get Flutter dependencies
 RUN flutter pub get
