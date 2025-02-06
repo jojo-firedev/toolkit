@@ -5,6 +5,7 @@ import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'dart:math';
 
 class ImageCompressorPage extends StatefulWidget {
   @override
@@ -15,9 +16,11 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
   List<Uint8List> imageBytesList = []; // Store original images
   List<Uint8List> compressedImages = []; // Store converted WebP images
   List<String> fileNames = []; // Store original file names
+  List<int> originalSizes = []; // Store original file sizes
+  List<int> compressedSizes = []; // Store compressed file sizes
   late DropzoneViewController dropzoneController;
   bool compressTo1080p = false; // Toggle for 1080p compression
-  double compressionQuality = 96; // Slider-controlled compression quality
+  double compressionQuality = 80; // Slider-controlled compression quality
 
   // 📌 Pick & Convert Images (PNG/JPG → WebP)
   Future<void> pickImages() async {
@@ -53,11 +56,13 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
     setState(() {
       imageBytesList.add(imageBytes);
       fileNames.add(fileName);
+      originalSizes.add(imageBytes.length);
     });
 
     Uint8List webpBytes = await convertToWebP(imageBytes);
     setState(() {
       compressedImages.add(webpBytes);
+      compressedSizes.add(webpBytes.length);
     });
   }
 
@@ -69,10 +74,9 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
 
     return await FlutterImageCompress.compressWithList(
       imageBytes,
-      minHeight:
-          compressTo1080p ? 1080 : originalHeight, // Ensure non-null value
-      minWidth: compressTo1080p ? 1080 : originalWidth, // Ensure non-null value
-      quality: compressionQuality.toInt(), // Use slider value for quality
+      minHeight: compressTo1080p ? 1080 : originalHeight,
+      minWidth: compressTo1080p ? 1080 : originalWidth,
+      quality: compressionQuality.toInt(),
       format: CompressFormat.webp,
     );
   }
@@ -108,8 +112,6 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
           ),
           SizedBox(height: 20),
 
-          SizedBox(height: 20),
-
           // 📌 Drag & Drop Area
           InkWell(
             onTap: pickImages,
@@ -140,7 +142,37 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
               ),
             ),
           ),
+
           SizedBox(height: 20),
+
+          // 📌 Preview List of Uploaded Images
+          if (imageBytesList.isNotEmpty)
+            Container(
+              height: 200,
+              child: Center(
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: imageBytesList.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Image.memory(
+                          imageBytesList[index],
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.scaleDown,
+                        ),
+                        Text(fileNames[index], style: TextStyle(fontSize: 12)),
+                      ],
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(width: 10),
+                ),
+              ),
+            ),
+
+          SizedBox(height: 20),
+
           // 📌 Compression Quality Slider
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -182,22 +214,18 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
               ),
             ],
           ),
+
           SizedBox(height: 20),
 
-          // 📌 Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FilledButton.icon(
-                onPressed: () {
-                  for (int i = 0; i < compressedImages.length; i++) {
-                    downloadWebP(compressedImages[i], fileNames[i]);
-                  }
-                },
-                icon: Icon(Icons.download),
-                label: Text("Download WebP"),
-              ),
-            ],
+          // 📌 Download Button
+          FilledButton.icon(
+            onPressed: () {
+              for (int i = 0; i < compressedImages.length; i++) {
+                downloadWebP(compressedImages[i], fileNames[i]);
+              }
+            },
+            icon: Icon(Icons.download),
+            label: Text("Download WebP"),
           ),
         ],
       ),
