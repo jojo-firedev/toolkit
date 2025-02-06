@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('FireDev Toolkit')),
+      appBar: AppBar(title: Text('FD Toolkit')),
       body: GridView.count(
         crossAxisCount: 2,
         padding: EdgeInsets.all(20),

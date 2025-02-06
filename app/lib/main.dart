@@ -16,7 +16,7 @@ class FireDevToolkitApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'FireDev Toolkit',
+      title: 'FD Toolkit',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.deepPurple, brightness: Brightness.dark),
