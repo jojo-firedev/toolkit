@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:social_media_toolkit/services/router.dart';
 import 'package:dynamic_path_url_strategy/dynamic_path_url_strategy.dart';
 
@@ -15,6 +16,14 @@ class FireDevToolkitApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setApplicationSwitcherDescription(
+      ApplicationSwitcherDescription(
+        label: 'FD Toolkit',
+        primaryColor:
+            Theme.of(context).primaryColor.value, // This line is required
+      ),
+    );
+
     return MaterialApp.router(
       title: 'FD Toolkit',
       theme: ThemeData(
