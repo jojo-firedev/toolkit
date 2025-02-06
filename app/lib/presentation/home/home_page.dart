@@ -54,9 +54,6 @@ class HomePage extends StatelessWidget {
                   ),
                   TextSpan(
                     text: 'jojo_firedev',
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () =>
-                          launchUrlString('https://github.com/jojo-firedev'),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ],
