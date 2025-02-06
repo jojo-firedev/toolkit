@@ -1,4 +1,5 @@
-# Flutter web frontend service
+volumes:
+  # Flutter web frontend service
   frontend:
 
     build:
