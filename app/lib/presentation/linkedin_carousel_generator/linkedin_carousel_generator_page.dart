@@ -1,6 +1,4 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-import 'dart:typed_data';
+import 'dart:js_interop';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:web/web.dart' as web;
 
 class LinkedInCarouselGeneratorPage extends StatefulWidget {
   const LinkedInCarouselGeneratorPage({super.key});
@@ -19,6 +18,8 @@ class LinkedInCarouselGeneratorPage extends StatefulWidget {
 
 class _LinkedInCarouselGeneratorPageState
     extends State<LinkedInCarouselGeneratorPage> {
+  bool useSquareFormat = true; // Default to 1:1 format
+
   List<Uint8List> imageBytesList = []; // Store images as byte arrays
   late DropzoneViewController dropzoneController;
 
@@ -50,36 +51,74 @@ class _LinkedInCarouselGeneratorPageState
   // 📌 Generate PDF from Selected Images (1:1 format)
   Future<void> generatePdf() async {
     if (imageBytesList.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Bitte wählen Sie mindestens ein Bild aus!')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Bitte wählen Sie mindestens ein Bild aus!')),
+        );
+      }
       return;
     }
 
     final pdf = pw.Document();
+    int minResolution = double.maxFinite.toInt();
+    double pageWidth = 1080;
+    double pageHeight = 1080;
+
+    if (useSquareFormat) {
+      // Find the smallest resolution but ensure it's at least 1080x1080
+      for (Uint8List imageBytes in imageBytesList) {
+        final decodedImage = await decodeImageFromList(imageBytes);
+        int minSide = decodedImage.width < decodedImage.height
+            ? decodedImage.width
+            : decodedImage.height;
+        if (minSide < minResolution) {
+          minResolution = minSide;
+        }
+      }
+      minResolution = minResolution < 1080 ? 1080 : minResolution;
+      pageWidth = pageHeight = minResolution.toDouble();
+    } else {
+      // Use the first image's aspect ratio
+      final firstImage = await decodeImageFromList(imageBytesList.first);
+      pageWidth = firstImage.width.toDouble();
+      pageHeight = firstImage.height.toDouble();
+
+      // Ensure at least 1080 in width
+      if (pageWidth < 1080) {
+        double scaleFactor = 1080 / pageWidth;
+        pageWidth = 1080;
+        pageHeight *= scaleFactor;
+      }
+    }
 
     for (Uint8List imageBytes in imageBytesList) {
       final pdfImage = pw.MemoryImage(imageBytes);
 
       pdf.addPage(
         pw.Page(
-          pageFormat: PdfPageFormat(1080, 1080), // ✅ Square Format (1:1)
+          pageFormat: PdfPageFormat(pageWidth, pageHeight), // Dynamic format
           build: (pw.Context context) => pw.Center(
-            child: pw.Image(pdfImage, fit: pw.BoxFit.cover), // ✅ Ensure Fit
+            child: pw.Image(pdfImage,
+                fit: pw.BoxFit.cover), // Ensure full coverage
           ),
         ),
       );
     }
 
-    // 📌 Convert PDF to Bytes & Download
     final pdfBytes = await pdf.save();
-    final blob = html.Blob([pdfBytes], 'application/pdf');
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    // ignore: unused_local_variable
-    final anchor = html.AnchorElement(href: url)
-      ..setAttribute('download', 'LinkedIn_Carousel.pdf')
+
+    // Convert to JS-friendly format
+    final jsBlob = web.Blob(
+        [pdfBytes.toJS].toJS, web.BlobPropertyBag(type: 'application/pdf'));
+
+    // Create and trigger a download link
+    final url = web.URL.createObjectURL(jsBlob);
+    web.HTMLAnchorElement()
+      ..href = url
+      ..download = 'LinkedIn_Carousel.pdf'
       ..click();
-    html.Url.revokeObjectUrl(url);
+    web.URL.revokeObjectURL(url);
   }
 
   @override
@@ -118,6 +157,7 @@ class _LinkedInCarouselGeneratorPageState
               textAlign: TextAlign.center,
             ),
           ),
+
           SizedBox(height: 10),
           // 📌 Drag & Drop Multiple Files Area
           InkWell(
@@ -164,6 +204,18 @@ class _LinkedInCarouselGeneratorPageState
                 ),
               ),
             ),
+          SizedBox(height: 20),
+
+          SwitchListTile(
+            title:
+                Text(useSquareFormat ? 'Quadratisch (1:1)' : 'Original Ratio'),
+            value: useSquareFormat,
+            onChanged: (value) {
+              setState(() {
+                useSquareFormat = value;
+              });
+            },
+          ),
           SizedBox(height: 20),
 
           Row(
