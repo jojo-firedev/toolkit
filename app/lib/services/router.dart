@@ -9,18 +9,21 @@ final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (final BuildContext context, final GoRouterState state) =>
-          const HomePage(),
+      builder:
+          (final BuildContext context, final GoRouterState state) =>
+              const HomePage(),
     ),
     GoRoute(
       path: '/social-media/linkedin-carousel',
-      builder: (final BuildContext context, final GoRouterState state) =>
-          const LinkedInCarouselGeneratorPage(),
+      builder:
+          (final BuildContext context, final GoRouterState state) =>
+              const LinkedInCarouselGeneratorPage(),
     ),
     GoRoute(
       path: '/converter/image-compressor',
-      builder: (final BuildContext context, final GoRouterState state) =>
-          ImageCompressorPage(),
+      builder:
+          (final BuildContext context, final GoRouterState state) =>
+              ImageCompressorPage(),
     ),
   ],
 );

@@ -55,7 +55,8 @@ class _LinkedInCarouselGeneratorPageState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content: Text('Bitte wählen Sie mindestens ein Bild aus!')),
+            content: Text('Bitte wählen Sie mindestens ein Bild aus!'),
+          ),
         );
       }
       return;
@@ -74,9 +75,10 @@ class _LinkedInCarouselGeneratorPageState
       // Find the smallest resolution but ensure it's at least 1080x1080
       for (Uint8List imageBytes in imageBytesList) {
         final decodedImage = await decodeImageFromList(imageBytes);
-        int minSide = decodedImage.width < decodedImage.height
-            ? decodedImage.width
-            : decodedImage.height;
+        int minSide =
+            decodedImage.width < decodedImage.height
+                ? decodedImage.width
+                : decodedImage.height;
         if (minSide < minResolution) {
           minResolution = minSide;
         }
@@ -103,10 +105,13 @@ class _LinkedInCarouselGeneratorPageState
       pdf.addPage(
         pw.Page(
           pageFormat: PdfPageFormat(pageWidth, pageHeight), // Dynamic format
-          build: (pw.Context context) => pw.Center(
-            child: pw.Image(pdfImage,
-                fit: pw.BoxFit.cover), // Ensure full coverage
-          ),
+          build:
+              (pw.Context context) => pw.Center(
+                child: pw.Image(
+                  pdfImage,
+                  fit: pw.BoxFit.cover,
+                ), // Ensure full coverage
+              ),
         ),
       );
     }
@@ -115,7 +120,9 @@ class _LinkedInCarouselGeneratorPageState
 
     // Convert to JS-friendly format
     final jsBlob = web.Blob(
-        [pdfBytes.toJS].toJS, web.BlobPropertyBag(type: 'application/pdf'));
+      [pdfBytes.toJS].toJS,
+      web.BlobPropertyBag(type: 'application/pdf'),
+    );
 
     // Create and trigger a download link
     final url = web.URL.createObjectURL(jsBlob);
@@ -150,9 +157,9 @@ class _LinkedInCarouselGeneratorPageState
               Text(
                 'LinkedIn Carousel Generator',
                 style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -163,7 +170,7 @@ class _LinkedInCarouselGeneratorPageState
             child: Text(
               'Erstellen Sie einen LinkedIn Carousel-Beitrag. '
               'Hierfür können Sie Bilder per Drag & Drop oder über den Dateiauswähler hinzufügen. '
-              'Klicken Sie auf "Als PDF exportieren", um die Bilder als PDF herunterzuladen.,',
+              'Klicken Sie auf "Als PDF exportieren", um die Bilder als PDF herunterzuladen.',
               textAlign: TextAlign.center,
             ),
           ),
@@ -183,8 +190,8 @@ class _LinkedInCarouselGeneratorPageState
                   alignment: Alignment.center,
                   children: [
                     DropzoneView(
-                      onCreated: (controller) =>
-                          dropzoneController = controller,
+                      onCreated:
+                          (controller) => dropzoneController = controller,
                       onDropFiles: (events) => onDropMultiple(events),
                     ),
                     Column(
@@ -207,11 +214,15 @@ class _LinkedInCarouselGeneratorPageState
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: imageBytesList.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Image.memory(imageBytesList[index],
-                      width: 80, height: 80),
-                ),
+                itemBuilder:
+                    (context, index) => Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Image.memory(
+                        imageBytesList[index],
+                        width: 80,
+                        height: 80,
+                      ),
+                    ),
               ),
             ),
           SizedBox(height: 20),

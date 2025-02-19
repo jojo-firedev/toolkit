@@ -114,9 +114,9 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
               Text(
                 'Bild Kompressor und WebP Konverter',
                 style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -136,8 +136,8 @@ class _ImageCompressorPageState extends State<ImageCompressorPage> {
                   alignment: Alignment.center,
                   children: [
                     DropzoneView(
-                      onCreated: (controller) =>
-                          dropzoneController = controller,
+                      onCreated:
+                          (controller) => dropzoneController = controller,
                       onDropFiles: (events) => onDropMultiple(events),
                     ),
                     Column(
