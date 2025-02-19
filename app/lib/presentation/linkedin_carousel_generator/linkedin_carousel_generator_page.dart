@@ -218,9 +218,19 @@ class _LinkedInCarouselGeneratorPageState
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Seitenverhältnis',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Original Ratio'),
+              Text('Seitenverhältnis\ndes 1. Bildes'),
               SizedBox(width: 10),
               Switch(
                 value: useSquareFormat,
