@@ -220,7 +220,7 @@ class _LinkedInCarouselGeneratorPageState
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Quadratisch (1:1)'),
+              Text('Original Ratio'),
               SizedBox(width: 10),
               Switch(
                 value: useSquareFormat,
@@ -231,7 +231,7 @@ class _LinkedInCarouselGeneratorPageState
                 },
               ),
               SizedBox(width: 10),
-              Text('Original Ratio'),
+              Text('Quadratisch (1:1)'),
             ],
           ),
 
