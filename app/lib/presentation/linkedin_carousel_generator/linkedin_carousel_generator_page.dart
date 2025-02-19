@@ -130,6 +130,7 @@ class _LinkedInCarouselGeneratorPageState
             Theme.of(context).primaryColor.value, // This line is required
       ),
     );
+    
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
