@@ -19,11 +19,12 @@ class LinkedInCarouselGeneratorPage extends StatefulWidget {
 class _LinkedInCarouselGeneratorPageState
     extends State<LinkedInCarouselGeneratorPage> {
   bool useSquareFormat = true; // Default to 1:1 format
+  bool loading = false;
 
   List<Uint8List> imageBytesList = []; // Store images as byte arrays
   late DropzoneViewController dropzoneController;
 
-  // 📌 Handle Drag & Drop for Multiple Files
+  // Handle Drag & Drop for Multiple Files
   Future<void> onDropMultiple(List<DropzoneFileInterface>? events) async {
     if (events == null) return;
     for (var event in events) {
@@ -34,7 +35,7 @@ class _LinkedInCarouselGeneratorPageState
     }
   }
 
-  // 📌 Pick Multiple Images Using File Picker
+  // Pick Multiple Images Using File Picker
   Future<void> pickImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
@@ -48,7 +49,7 @@ class _LinkedInCarouselGeneratorPageState
     }
   }
 
-  // 📌 Generate PDF from Selected Images (1:1 format)
+  // Generate PDF from Selected Images (1:1 format)
   Future<void> generatePdf() async {
     if (imageBytesList.isEmpty) {
       if (mounted) {
@@ -59,6 +60,10 @@ class _LinkedInCarouselGeneratorPageState
       }
       return;
     }
+
+    setState(() {
+      loading = true;
+    });
 
     final pdf = pw.Document();
     int minResolution = double.maxFinite.toInt();
@@ -119,6 +124,10 @@ class _LinkedInCarouselGeneratorPageState
       ..download = 'LinkedIn_Carousel.pdf'
       ..click();
     web.URL.revokeObjectURL(url);
+
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -130,7 +139,7 @@ class _LinkedInCarouselGeneratorPageState
             Theme.of(context).primaryColor.value, // This line is required
       ),
     );
-    
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -160,7 +169,7 @@ class _LinkedInCarouselGeneratorPageState
           ),
 
           SizedBox(height: 10),
-          // 📌 Drag & Drop Multiple Files Area
+          // Drag & Drop Multiple Files Area
           InkWell(
             onTap: pickImages,
             child: DottedBorder(
@@ -207,26 +216,38 @@ class _LinkedInCarouselGeneratorPageState
             ),
           SizedBox(height: 20),
 
-          SwitchListTile(
-            title:
-                Text(useSquareFormat ? 'Quadratisch (1:1)' : 'Original Ratio'),
-            value: useSquareFormat,
-            onChanged: (value) {
-              setState(() {
-                useSquareFormat = value;
-              });
-            },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Quadratisch (1:1)'),
+              SizedBox(width: 10),
+              Switch(
+                value: useSquareFormat,
+                onChanged: (value) {
+                  setState(() {
+                    useSquareFormat = value;
+                  });
+                },
+              ),
+              SizedBox(width: 10),
+              Text('Original Ratio'),
+            ],
           ),
+
           SizedBox(height: 20),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              FilledButton.icon(
-                onPressed: generatePdf,
-                icon: Icon(Icons.picture_as_pdf),
-                label: Text('Als PDF exportieren'),
-              ),
+              if (loading)
+                CircularProgressIndicator()
+              else
+                FilledButton.icon(
+                  onPressed: generatePdf,
+                  icon: Icon(Icons.picture_as_pdf),
+                  label: Text('Als PDF exportieren'),
+                ),
             ],
           ),
         ],
